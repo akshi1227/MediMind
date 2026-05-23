@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # Main API Connector
+  main_api:
+    build: ./backend/main_api
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend/main_api:/app
+      - ./shared:/app/shared
+    environment:
+      - PORT=3001
+
+  # AI Engine
+  ai_service:
+    build: ./backend/ai_service
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/ai_service:/app
+
+  # Frontend (Static Server)
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html

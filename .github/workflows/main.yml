@@ -1,0 +1,38 @@
+name: MediMind CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install Node Dependencies
+      run: |
+        cd backend/main_api
+        npm install
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install Python Dependencies
+      run: |
+        cd backend/ai_service
+        pip install fastapi uvicorn
+
+    - name: Docker Build Check
+      run: |
+        docker-compose config
